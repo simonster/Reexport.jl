@@ -8,7 +8,7 @@ module X1
     end
 end
 
-@test Set(names(X1)) == Set([:X1, :Y1, :Z1])
+@test union!(Set(), names(X1)) == union!(Set(), [:X1, :Y1, :Z1])
 @test X1.Z1 == 1
 
 module Y2
@@ -19,7 +19,7 @@ module X2
     using Reexport
     @reexport using Y2
 end
-@test Set(names(X2)) == Set([:X2, :Y2, :Z2])
+@test union!(Set(), names(X2)) == union!(Set(), [:X2, :Y2, :Z2])
 @test X2.Z2 == 2
 
 module X3
@@ -34,6 +34,6 @@ module X3
     end
     @reexport using .Y3, .Y4
 end
-@test Set(names(X3)) == Set([:X3, :Y3, :Y4, :Z3, :Z4])
+@test union!(Set(), names(X3)) == union!(Set(), [:X3, :Y3, :Y4, :Z3, :Z4])
 @test X3.Z3 == 3
 @test X3.Z4 == 4
