@@ -4,7 +4,7 @@
 
 ## Introduction
 
-Maybe you have a module `X` that depends on module `Y` and you want `using X` to pull in all of the symbols from `Y`. Maybe you have an outer module `A` with an inner module `B`, and you want to export all of the symbols in `B` from `A`. It would be nice to have this functionality built into Julia, but we have yet to reach an agreement on what it should look like (see JuliaLang/julia#1986). This short macro is a stopgap we have a better solution.
+Maybe you have a module `X` that depends on module `Y` and you want `using X` to pull in all of the symbols from `Y`. Maybe you have an outer module `A` with an inner module `B`, and you want to export all of the symbols in `B` from `A`. It would be nice to have this functionality built into Julia, but we have yet to reach an agreement on what it should look like (see [JuliaLang/julia#1986](https://github.com/JuliaLang/julia/issues/1986)). This short macro is a stopgap we have a better solution.
 
 ## Usage
 
