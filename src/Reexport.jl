@@ -17,7 +17,7 @@ macro reexport(ex)
     end
     
     esc(Expr(:toplevel, ex,
-             [:(eval(Expr(:export, names($(mod))...))) for mod in modules]...))
+             [:(eval(Expr(:export, setdiff(names($(mod)), [mod])...))) for mod in modules]...))
 end
 
 export @reexport
