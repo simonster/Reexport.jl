@@ -8,12 +8,12 @@ macro reexport(ex)
         error("@reexport: syntax error")
     
     if ex.head == :module
-        modules = {ex.args[2]}
+        modules = Any[ex.args[2]]
         ex = Expr(:toplevel, ex, Expr(:using, :., ex.args[2]))
     elseif ex.head == :using
-        modules = {ex.args[end]}
+        modules = Any[ex.args[end]]
     else
-        modules = {e.args[end] for e in ex.args}
+        modules = Any[e.args[end] for e in ex.args]
     end
     
     esc(Expr(:toplevel, ex,
