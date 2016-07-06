@@ -19,7 +19,7 @@ module X2
     using Reexport
     @reexport using Y2
 end
-@test union!(Set(), names(X2)) == union!(Set(), [:X2, :Y2, :Z2])
+@test union!(Set(), names(X2)) == union!(Set(), [:X2, :Z2])
 @test X2.Z2 == 2
 
 module X3
