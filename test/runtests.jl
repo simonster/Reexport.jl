@@ -37,3 +37,26 @@ end
 @test union!(Set(), names(X3)) == union!(Set(), [:X3, :Y3, :Y4, :Z3, :Z4])
 @test X3.Z3 == 3
 @test X3.Z4 == 4
+
+module X4
+    using Reexport
+    @reexport importall Y2
+end
+@test union!(Set(), names(X4)) == union!(Set(), [:X4, :Y2, :Z2])
+@test X4.Z2 == 2
+
+module X5
+    using Reexport
+    module Y3
+        const Z3 = 3
+        export Z3
+    end
+    module Y4
+        const Z4 = 4
+        export Z4
+    end
+    @reexport importall .Y3, .Y4
+end
+@test union!(Set(), names(X3)) == union!(Set(), [:X3, :Y3, :Y4, :Z3, :Z4])
+@test X3.Z3 == 3
+@test X3.Z4 == 4
