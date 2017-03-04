@@ -11,18 +11,18 @@ Maybe you have a module `X` that depends on module `Y` and you want `using X` to
 `@reexport using <modules>` calls `using <modules>` and also re-exports their symbols:
 
 ```julia
-module X
+module Y
     ...
 end
 
-module Y
+module X
     using Reexport
-    @reexport using X
-    # all of X's exported symbols available here
+    @reexport using Y
+    # all of Y's exported symbols available here
 end
 
-using Y
-# all of X's exported symbols also available here
+using X
+# all of Y's exported symbols also available here
 ```
 
 `@reexport module <modulename> ... end` defines `module <modulename>` and also re-exports its symbols:
