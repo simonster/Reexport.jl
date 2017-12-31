@@ -1,4 +1,5 @@
-using Base.Test  
+using Compat
+using Compat.Test
 
 module X1
     using Reexport
@@ -17,7 +18,9 @@ module Y2
 end
 module X2
     using Reexport
-    @reexport using Y2
+    # Locally defined modules require a prefix for lookup in 0.7. It isn't necessary
+    # on older versions but doesn't hurt.
+    @reexport using Main.Y2
 end
 @test union!(Set(), names(X2)) == union!(Set(), [:X2, :Y2, :Z2])
 @test X2.Z2 == 2
@@ -40,7 +43,12 @@ end
 
 module X4
     using Reexport
-    @reexport importall Y2
+    @static if VERSION >= v"0.7.0-DEV.2038"
+        # importall is deprecated in 0.7
+        @reexport using Main.Y2
+    else
+        @reexport importall Main.Y2
+    end
 end
 @test union!(Set(), names(X4)) == union!(Set(), [:X4, :Y2, :Z2])
 @test X4.Z2 == 2
@@ -55,7 +63,11 @@ module X5
         const Z4 = 4
         export Z4
     end
-    @reexport importall .Y3, .Y4
+    @static if VERSION >= v"0.7.0-DEV.2038"
+        @reexport using .Y3, .Y4
+    else
+        @reexport importall .Y3, .Y4
+    end
 end
 @test union!(Set(), names(X3)) == union!(Set(), [:X3, :Y3, :Y4, :Z3, :Z4])
 @test X3.Z3 == 3
