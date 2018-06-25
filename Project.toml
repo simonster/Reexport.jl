@@ -1,0 +1,6 @@
+authors = ["Simon Kornblith"]
+name = "Reexport"
+uuid = "49f8cfe4-7840-11e8-1b5d-9125d323f20a"
+version = "0.1.1"
+
+[deps]
