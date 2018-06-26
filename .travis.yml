@@ -5,11 +5,12 @@ os:
 julia:
   - 0.5
   - 0.6
+  - 0.7
   - nightly
 notifications:
   email: false
 script:
- - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
- - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("Reexport"); Pkg.test("Reexport"; coverage=true)'
+  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+  - julia -e 'if VERSION < v"0.7.0-DEV.5183"; Pkg.clone(pwd()); else; using Pkg; Pkg.add(pwd()); end; Pkg.test("Reexport"; coverage=true)'
 after_success:
-- julia -e 'cd(Pkg.dir("Reexport")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+- julia -e 'VERSION < v"0.7.0-DEV" || (using Pkg); cd(Pkg.dir("Reexport")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
