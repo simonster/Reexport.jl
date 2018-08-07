@@ -1,19 +1,16 @@
-isdefined(Base, :__precompile__) && __precompile__()
-
 module Reexport
 
 macro reexport(ex)
     isa(ex, Expr) && (ex.head == :module ||
                       ex.head == :using ||
-                      ex.head == :importall ||
                       (ex.head == :toplevel &&
-                       all(e->isa(e, Expr) && (e.head == :using || e.head == :importall), ex.args))) ||
+                       all(e->isa(e, Expr) && e.head == :using, ex.args))) ||
         error("@reexport: syntax error")
 
     if ex.head == :module
         modules = Any[ex.args[2]]
         ex = Expr(:toplevel, ex, :(using .$(ex.args[2])))
-    elseif (ex.head == :using || ex.head == :importall) && all(e->isa(e, Symbol), ex.args)
+    elseif ex.head == :using && all(e->isa(e, Symbol), ex.args)
         modules = Any[ex.args[end]]
     else
         modules = Any[e.args[end] for e in ex.args]
