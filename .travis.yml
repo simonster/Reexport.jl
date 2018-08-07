@@ -3,13 +3,12 @@ os:
   - linux
   - osx
 julia:
-  - 0.5
-  - 0.6
+  - 0.7
   - nightly
 notifications:
   email: false
 script:
  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
- - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("Reexport"); Pkg.test("Reexport"; coverage=true)'
+ - julia --check-bounds=yes -e 'import Pkg; Pkg.clone(pwd()); Pkg.build("Reexport"); Pkg.test("Reexport"; coverage=true)'
 after_success:
-- julia -e 'cd(Pkg.dir("Reexport")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+- julia -e 'import Pkg; cd(Pkg.dir("Reexport")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
