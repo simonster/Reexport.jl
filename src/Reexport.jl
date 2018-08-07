@@ -1,5 +1,3 @@
-isdefined(Base, :__precompile__) && __precompile__()
-
 module Reexport
 
 macro reexport(ex)

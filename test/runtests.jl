@@ -43,12 +43,7 @@ end
 
 module X4
     using Reexport
-    @static if VERSION >= v"0.7.0-DEV.2038"
-        # importall is deprecated in 0.7
-        @reexport using Main.Y2
-    else
-        @reexport importall Main.Y2
-    end
+    @reexport using Main.Y2
 end
 @test union!(Set(), names(X4)) == union!(Set(), [:X4, :Y2, :Z2])
 @test X4.Z2 == 2
@@ -63,11 +58,7 @@ module X5
         const Z4 = 4
         export Z4
     end
-    @static if VERSION >= v"0.7.0-DEV.2038"
-        @reexport using .Y3, .Y4
-    else
-        @reexport importall .Y3, .Y4
-    end
+    @reexport using .Y3, .Y4
 end
 @test union!(Set(), names(X3)) == union!(Set(), [:X3, :Y3, :Y4, :Z3, :Z4])
 @test X3.Z3 == 3
