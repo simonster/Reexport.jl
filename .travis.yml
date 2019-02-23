@@ -1,14 +1,14 @@
+# Documentation: http://docs.travis-ci.com/user/languages/julia/
 language: julia
 os:
   - linux
   - osx
 julia:
-  - 0.7
+  - 1.0
   - nightly
 notifications:
   email: false
-script:
- - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
- - julia --check-bounds=yes -e 'import Pkg; Pkg.clone(pwd()); Pkg.build("Reexport"); Pkg.test("Reexport"; coverage=true)'
-after_success:
-- julia -e 'import Pkg; cd(Pkg.dir("Reexport")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+# uncomment the following lines to override the default test script
+#script:
+#  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+#  - julia -e 'Pkg.clone(pwd()); Pkg.build("Pages"); Pkg.test("Pages"; coverage=true)'
