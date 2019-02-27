@@ -1,5 +1,4 @@
-using Compat
-using Compat.Test
+using Test
 
 module X1
     using Reexport
