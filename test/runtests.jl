@@ -62,3 +62,21 @@ end
 @test union!(Set(), names(X3)) == union!(Set(), [:X3, :Y3, :Y4, :Z3, :Z4])
 @test X3.Z3 == 3
 @test X3.Z4 == 4
+
+module X6
+    using Reexport
+    module Y5
+        const Z5 = 5
+        export Z5
+        const Z6 = 6
+        export Z6
+    end
+    @reexport using .Y5: Z5, Z6
+end
+@test union!(Set(), names(X6)) == union!(Set(), [:X6, :Z5, :Z6])
+@test X6.Z5 == 5
+@test X6.Z6 == 6
+
+using .X6
+@test Z5 == 5
+@test Z6 == 6
