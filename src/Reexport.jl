@@ -13,7 +13,7 @@ macro reexport(ex)
     elseif ex.head == :using && all(e->isa(e, Symbol), ex.args)
         modules = Any[ex.args[end]]
     elseif ex.head == :using && ex.args[1].head == :(:)
-        symbols = [e.args[end] for e in ex.args[1].args]
+        symbols = [e.args[end] for e in ex.args[1].args[2:end]]
         return esc(Expr(:toplevel, ex, :(eval(Expr(:export, $symbols...)))))
     else
         modules = Any[e.args[end] for e in ex.args]

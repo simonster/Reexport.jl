@@ -73,6 +73,6 @@ module X6
     end
     @reexport using .Y5: Z5, Z6
 end
-@test union!(Set(), names(X6)) == union!(Set(), [:X6, :Y5, :Z5, :Z6])
+@test union!(Set(), names(X6)) == union!(Set(), [:X6, :Z5, :Z6])
 @test X6.Z5 == 5
 @test X6.Z6 == 6
