@@ -15,14 +15,20 @@ module Y
     ...
 end
 
+module Z
+    ...
+end
+
 module X
     using Reexport
     @reexport using Y
     # all of Y's exported symbols available here
+    @reexport using Z: x, y
+    # Z's x and y symbols available here
 end
 
 using X
-# all of Y's exported symbols also available here
+# all of Y's exported symbols and Z's x and y also available here
 ```
 
 `@reexport module <modulename> ... end` defines `module <modulename>` and also re-exports its symbols:

@@ -12,6 +12,10 @@ macro reexport(ex)
         ex = Expr(:toplevel, ex, :(using .$(ex.args[2])))
     elseif ex.head == :using && all(e->isa(e, Symbol), ex.args)
         modules = Any[ex.args[end]]
+    elseif ex.head == :using && ex.args[1].head == :(:)
+        ex1 = [Expr(:export, e.args[end]) for e in ex.args[1].args]
+        ex2 = [:(eval($e)) for e in ex1]
+        return esc(Expr(:toplevel, ex, ex2...))
     else
         modules = Any[e.args[end] for e in ex.args]
     end
