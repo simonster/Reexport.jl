@@ -80,3 +80,15 @@ end
 using .X6
 @test Z5 == 5
 @test Z6 == 6
+
+module X7
+    using Reexport
+    module Y7
+        struct T7 end
+        export T7
+        Base.@deprecate_binding S7 T7
+    end
+    @reexport using .Y7
+end
+using .X7
+@test Base.isexported(X7, :S7)

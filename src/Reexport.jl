@@ -20,7 +20,9 @@ macro reexport(ex)
     end
 
     esc(Expr(:toplevel, ex,
-             [:(eval(Expr(:export, names($mod)...))) for mod in modules]...))
+             [:(eval(Expr(:export, filter!(x -> Base.isexported($mod, x),
+                                           names($mod; all=true, imported=true))...)))
+              for mod in modules]...))
 end
 
 export @reexport
