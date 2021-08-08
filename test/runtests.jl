@@ -94,7 +94,6 @@ using .X7
 @test Base.isexported(X7, :S7)
 
 #== Imports ==#
-
 module X8
     using Reexport
 
@@ -131,7 +130,6 @@ module X10
     @reexport import .InnerX10
 end
 
-
 @testset "import" begin
     @testset "Rexported qualified single import" begin
         @test Set(names(X8)) == Set([:X8, :a])
@@ -147,7 +145,6 @@ end
 end
 
 #== block ==#
-
 module X11
     using Reexport
     @reexport begin
@@ -177,7 +174,6 @@ module X13
     end
 end
 
-
 @testset "block" begin
     @testset "block of using" begin
         @test Set(names(X11)) == union(Set(names(X8)), Set(names(X9)), Set([:X11]))
@@ -191,8 +187,6 @@ end
 end
 
 #== macroexpand ==#
-
-
 module X14
     using Reexport
 
