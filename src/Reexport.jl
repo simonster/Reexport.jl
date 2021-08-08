@@ -9,6 +9,7 @@ function reexport(m::Module, ex::Expr)
     ex = macroexpand(m, ex)
     # recursively unpack any blocks
     if ex.head == :block
+        ex = Base.remove_linenums!(ex)
         return Expr(:block, map(e -> reexport(m, e), ex.args)...)
     end
 
