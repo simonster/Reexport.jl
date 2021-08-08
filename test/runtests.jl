@@ -92,3 +92,122 @@ module X7
 end
 using .X7
 @test Base.isexported(X7, :S7)
+
+#== Imports ==#
+
+module X8
+    using Reexport
+
+    module InnerX8
+        const a = 1
+        export a
+    end
+    @reexport import .InnerX8.a
+end
+
+module X9
+    using Reexport
+
+    module InnerX9_1
+        const a = 1
+        export a
+    end
+
+    module InnerX9_2
+        const b = 1
+        export b
+    end
+
+    @reexport import .InnerX9_1.a, .InnerX9_2.b
+end
+
+module X10
+    using Reexport
+
+    module InnerX10
+        const b = 1
+        export b
+    end
+    @reexport import .InnerX10
+end
+
+
+@testset "import" begin
+    @testset "Rexported qualified single import" begin
+        @test Set(names(X8)) == Set([:X8, :a])
+    end
+
+    @testset "Rexported qualified multiple import" begin
+        @test Set(names(X9)) == Set([:X9, :a, :b])
+    end
+
+    @testset "Reexported module import" begin
+        @test Set(names(X10)) == Set([:X10, :InnerX10])
+    end
+end
+
+#== block ==#
+
+module X11
+    using Reexport
+    @reexport begin
+        using Main.X8
+        using Main.X9
+    end
+end
+
+module X12
+    using Reexport
+    @reexport begin
+        import Main.X8
+        import Main.X9
+    end
+end
+
+module X13
+    using Reexport
+    module InnerX13
+        const a = 1
+        export a
+    end
+    @reexport begin
+        import Main.X8
+        using Main.X9
+        using .InnerX13: a
+    end
+end
+
+
+@testset "block" begin
+    @testset "block of using" begin
+        @test Set(names(X11)) == union(Set(names(X8)), Set(names(X9)), Set([:X11]))
+    end
+    @testset "block of import" begin
+        @test Set(names(X12)) == Set([:X12, :X8, :X9])
+    end
+    @testset "mixed using and import" begin
+        @test Set(names(X13)) == union(Set([:X13, :X8, :a]), Set(names(X9)))
+    end
+end
+
+#== macroexpand ==#
+
+
+module X14
+    using Reexport
+
+    macro identity_macro(ex::Expr)
+        ex
+    end
+
+    module InnerX14
+        const a = 1
+        export a
+    end
+
+    @reexport @identity_macro using .InnerX14: a
+end
+@testset "macroexpand" begin
+    @test Set(names(X14)) == Set([:X14, :a])
+end
+
