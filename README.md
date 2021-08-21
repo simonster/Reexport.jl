@@ -1,6 +1,6 @@
 # Reexport
 
-[![Build Status](https://travis-ci.org/simonster/Reexport.jl.svg)](https://travis-ci.org/simonster/Reexport.jl)
+[![Build status](https://github.com/simonster/Reexport.jl/workflows/CI/badge.svg)](https://github.com/simonster/Reexport.jl/actions?query=workflow%3ACI+branch%3Amaster)
 
 ## Introduction
 
