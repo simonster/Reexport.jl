@@ -14,19 +14,19 @@ function reexport(m::Module, ex::Expr)
         return Expr(:block, map(e -> reexport(m, e), ex.args)...)
     end
 
-    Meta.isexpr(ex, [:module, :using, :import]) ||
-        Meta.isexpr(ex, :toplevel) && all(e -> isa(e, Expr) && e.head == :using, ex.args) ||
+    ex.head in (:module, :using, :import) ||
+        ex.head === :toplevel && all(e -> isa(e, Expr) && e.head == :using, ex.args) ||
         error("@reexport: syntax error")
 
-    if Meta.isexpr(ex, :module)
+    if ex.head === :module
         # @reexport {using, import} module Foo ... end
         modules = Any[ex.args[2]]
         ex = Expr(:toplevel, ex, :(using .$(ex.args[2])))
-    elseif Meta.isexpr(ex, [:using, :import]) && ex.args[1].head == :(:)
+    elseif ex.head in (:using, :import) && ex.args[1].head == :(:)
         # @reexport {using, import} Foo: bar, baz
         symbols = [e.args[end] for e in ex.args[1].args[2:end]]
         return Expr(:toplevel, ex, :(eval(Expr(:export, $symbols...))))
-    elseif Meta.isexpr(ex, :import) && all(e -> e.head == :(.), ex.args)
+    elseif ex.head === :import && all(e -> e.head == :(.), ex.args)
         # @reexport import Foo.bar, Baz.qux
         symbols = Any[e.args[end] for e in ex.args]
         return Expr(:toplevel, ex, :(eval(Expr(:export, $symbols...))))
