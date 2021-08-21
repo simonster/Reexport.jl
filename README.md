@@ -31,6 +31,29 @@ using X
 # all of Y's exported symbols and Z's x and y also available here
 ```
 
+`@reexport import <module>.<name>` or `@reexport import <module>: <name>` exports `<name>` from `<module>` after importing it.
+
+```julia
+module Y
+    ...
+end
+
+module Z
+    ...
+end
+
+module X
+    using Reexport
+    @reexport import Y
+    # Only `Y` itself is available here
+    @reexport import Z: x, y
+    # Z's x and y symbols available here
+end
+
+using X
+# Y (but not it's exported names) and Z's x and y are available here.
+```
+
 `@reexport module <modulename> ... end` defines `module <modulename>` and also re-exports its symbols:
 
 ```julia
@@ -45,3 +68,5 @@ end
 using A
 # all of B's exported symbols available here
 ```
+
+`@reexport @another_macro <import or using expression>` first expands `@another_macro` on the expression, making `@reexport` with other macros.
