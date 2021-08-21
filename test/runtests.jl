@@ -94,14 +94,14 @@ using .X7
 @test Base.isexported(X7, :S7)
 
 #== Imports ==#
-module X9
+module X8
     using Reexport
 
-    module InnerX9
+    module InnerX8
         const a = 1
         export a
     end
-    @reexport import .InnerX9: a
+    @reexport import .InnerX8: a
 end
 
 module X9
@@ -142,7 +142,7 @@ end
 
 @testset "import" begin
     @testset "Reexported colon-qualified single import" begin
-        @test Set(names(X9)) == Set([:X9, :a])
+        @test Set(names(X8)) == Set([:X8, :a])
     end
 
     @testset "Reexported dot-qualified single import" begin
