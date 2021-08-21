@@ -1,6 +1,6 @@
 # Reexport
 
-[![Build Status](https://travis-ci.org/simonster/Reexport.jl.svg)](https://travis-ci.org/simonster/Reexport.jl)
+[![Build status](https://github.com/simonster/Reexport.jl/workflows/CI/badge.svg)](https://github.com/simonster/Reexport.jl/actions?query=workflow%3ACI+branch%3Amaster)
 
 ## Introduction
 
@@ -51,7 +51,7 @@ module X
 end
 
 using X
-# Y (but not it's exported names) and Z's x and y are available here.
+# Y (but not its exported names) and Z's x and y are available here.
 ```
 
 `@reexport module <modulename> ... end` defines `module <modulename>` and also re-exports its symbols:
