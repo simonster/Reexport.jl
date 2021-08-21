@@ -70,3 +70,5 @@ using A
 ```
 
 `@reexport @another_macro <import or using expression>` first expands `@another_macro` on the expression, making `@reexport` with other macros.
+
+`@reexport begin ... end` will apply the reexport macro to every expression in the block.
