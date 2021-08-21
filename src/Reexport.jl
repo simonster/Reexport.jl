@@ -4,12 +4,13 @@ macro reexport(ex::Expr)
     esc(reexport(__module__, ex))
 end
 
+reexport(m::Module, l::LineNumberNode) = l
+
 function reexport(m::Module, ex::Expr)
     # unpack any macros
     ex = macroexpand(m, ex)
     # recursively unpack any blocks
     if ex.head == :block
-        ex = Base.remove_linenums!(ex)
         return Expr(:block, map(e -> reexport(m, e), ex.args)...)
     end
 
