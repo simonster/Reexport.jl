@@ -51,7 +51,7 @@ module X
 end
 
 using X
-# Y (but not it's exported names) and Z's x and y are available here.
+# Y (but not its exported names) and Z's x and y are available here.
 ```
 
 `@reexport module <modulename> ... end` defines `module <modulename>` and also re-exports its symbols:
