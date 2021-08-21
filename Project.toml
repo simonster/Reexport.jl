@@ -1,7 +1,7 @@
 name = "Reexport"
 uuid = "189a3867-3050-52da-a836-e630ba90ab69"
 authors = ["Simon Kornblith <simon@simonster.com>"]
-version = "1.1.0"
+version = "1.2.0"
 
 [compat]
 julia = "1"
