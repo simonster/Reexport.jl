@@ -219,3 +219,11 @@ end
     @test Set(names(X15)) == Set([:X15, :a])
 end
 
+baremodule B16
+    using Reexport
+    @reexport using Test
+end
+using .B16
+@testset "baremodule" begin
+    @test Base.isexported(B16, Symbol("@test"))
+end

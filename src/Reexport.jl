@@ -35,11 +35,15 @@ function reexport(m::Module, ex::Expr)
         modules = Any[e.args[end] for e in ex.args]
     end
 
-    Expr(:toplevel, ex,
-         [:(eval(Expr(:export, filter!(x -> Base.isexported($mod, x),
-                                       names($mod; all=true, imported=true))...)))
-          for mod in modules]...)
+    names = GlobalRef(@__MODULE__, :exported_names)
+    out = Expr(:toplevel, ex)
+    for mod in modules
+        push!(out.args, :(Core.eval($m, Expr(:export, $names($mod)...))))
+    end
+    return out
 end
+
+exported_names(m::Module) = filter!(x -> Base.isexported(m, x), names(m; all=true, imported=true))
 
 export @reexport
 
