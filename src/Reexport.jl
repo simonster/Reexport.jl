@@ -25,11 +25,11 @@ function reexport(m::Module, ex::Expr)
     elseif ex.head in (:using, :import) && ex.args[1].head == :(:)
         # @reexport {using, import} Foo: bar, baz
         symbols = [e.args[end] for e in ex.args[1].args[2:end]]
-        return Expr(:toplevel, ex, :(eval(Expr(:export, $symbols...))))
+        return Expr(:toplevel, ex, :(Core.eval($m, Expr(:export, $symbols...))))
     elseif ex.head === :import && all(e -> e.head === :., ex.args)
         # @reexport import Foo.bar, Baz.qux
         symbols = Any[e.args[end] for e in ex.args]
-        return Expr(:toplevel, ex, :(eval(Expr(:export, $symbols...))))
+        return Expr(:toplevel, ex, :(Core.eval($m, Expr(:export, $symbols...))))
     else
         # @reexport using Foo, Bar, Baz
         modules = Any[e.args[end] for e in ex.args]
