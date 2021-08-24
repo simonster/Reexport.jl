@@ -18,6 +18,8 @@ function reexport(m::Module, ex::Expr)
         ex.head === :toplevel && all(e -> isa(e, Expr) && e.head === :using, ex.args) ||
         error("@reexport: syntax error")
 
+    eval = GlobalRef(Core, :eval)
+
     if ex.head === :module
         # @reexport {using, import} module Foo ... end
         modules = Any[ex.args[2]]
@@ -25,11 +27,11 @@ function reexport(m::Module, ex::Expr)
     elseif ex.head in (:using, :import) && ex.args[1].head == :(:)
         # @reexport {using, import} Foo: bar, baz
         symbols = [e.args[end] for e in ex.args[1].args[2:end]]
-        return Expr(:toplevel, ex, :(Core.eval($m, Expr(:export, $symbols...))))
+        return Expr(:toplevel, ex, :($eval($m, Expr(:export, $symbols...))))
     elseif ex.head === :import && all(e -> e.head === :., ex.args)
         # @reexport import Foo.bar, Baz.qux
         symbols = Any[e.args[end] for e in ex.args]
-        return Expr(:toplevel, ex, :(Core.eval($m, Expr(:export, $symbols...))))
+        return Expr(:toplevel, ex, :($eval($m, Expr(:export, $symbols...))))
     else
         # @reexport using Foo, Bar, Baz
         modules = Any[e.args[end] for e in ex.args]
@@ -38,7 +40,7 @@ function reexport(m::Module, ex::Expr)
     names = GlobalRef(@__MODULE__, :exported_names)
     out = Expr(:toplevel, ex)
     for mod in modules
-        push!(out.args, :(Core.eval($m, Expr(:export, $names($mod)...))))
+        push!(out.args, :($eval($m, Expr(:export, $names($mod)...))))
     end
     return out
 end

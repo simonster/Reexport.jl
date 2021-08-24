@@ -233,9 +233,16 @@ module X16
         using Reexport
         @reexport import Test.@test
     end
+    baremodule D
+        using Reexport
+        # Ensure that there are no module name conflicts with Core
+        baremodule Core
+        end
+    end
     @testset "baremodule" begin
         @test Base.isexported(A, Symbol("@test"))
         @test Reexport.exported_names(B) == [Symbol("@testset"), :B]
         @test Reexport.exported_names(C) == [Symbol("@test"), :C]
+        @test Reexport.exported_names(D) == [:D]
     end
 end
