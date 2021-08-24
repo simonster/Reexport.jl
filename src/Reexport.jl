@@ -38,7 +38,7 @@ function reexport(m::Module, ex::Expr)
     names = GlobalRef(@__MODULE__, :exported_names)
     out = Expr(:toplevel, ex)
     for mod in modules
-        push!(out.args, :(Core.eval($m, Expr(:export, $names($mod)...))))
+        push!(out.args, :($(Core.eval)($m, Expr(:export, $names($mod)...))))
     end
     return out
 end
