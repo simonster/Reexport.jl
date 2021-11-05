@@ -78,12 +78,12 @@ using A
 Without restating [the semantic versioning](https://semver.org/) in complete details here's the
 simplified version of it.
 
-![semvar_workflow](todo.png)
+![semver_workflow](https://user-images.githubusercontent.com/8684355/140514464-4ac1098e-1c72-47be-a926-2dfedfc80fd0.png)
 
 If we adopt Reexport to PkgA, then `@reexport using PkgB` makes PkgB a reexported dependency of
 PkgA. Assume that we have the following dependency graph:
 
-![semvar_example_package](todo.png)
+![semver_example_package](https://user-images.githubusercontent.com/8684355/140514459-e460444d-a65f-481f-8520-964d605a851e.png)
 
 This works pretty well if it's all about bug fixes and new features. But for breaking changes, say
 PkgD makes a breaking release from v1.0.0 to v2.0.0, a natural question is: should we propagate the
@@ -92,7 +92,7 @@ answer to this is: if the change is about the reexported symbol, then we have to
 release, and then do the same to PkgA. If it is not about the reexported symbol, then we should try
 to absorb the PkgD breaking change as PkgB internal changes and only release PkgB v1.0.1 or v1.1.0.
 
-![semvar_solution](todo.png)
+![semver_solution](https://user-images.githubusercontent.com/8684355/140514463-0c198714-915a-41cb-bc04-bdab80f373e0.png)
 
 We need to do this because from a user's perspective he does not know whether the symbol is
 reexported. Thus _if the bottom makes a breaking change to any exported symbols, not bumpping major
