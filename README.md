@@ -78,7 +78,7 @@ using A
 Without restating [the semantic versioning](https://semver.org/) in complete details here's the
 simplified version of it.
 
-![semver_workflow](https://user-images.githubusercontent.com/8684355/140514464-4ac1098e-1c72-47be-a926-2dfedfc80fd0.png)
+![semver_workflow](https://user-images.githubusercontent.com/8684355/140516112-fb487fc9-9e1d-43d0-9560-258b8d98330b.png)
 
 If we adopt Reexport to PkgA, then `@reexport using PkgB` makes PkgB a reexported dependency of
 PkgA. Assume that we have the following dependency graph:
@@ -92,7 +92,7 @@ answer to this is: if the change is about the reexported symbol, then we have to
 release, and then do the same to PkgA. If it is not about the reexported symbol, then we should try
 to absorb the PkgD breaking change as PkgB internal changes and only release PkgB v1.0.1 or v1.1.0.
 
-![semver_solution](https://user-images.githubusercontent.com/8684355/140514463-0c198714-915a-41cb-bc04-bdab80f373e0.png)
+![semver_solution](https://user-images.githubusercontent.com/8684355/140516220-573ceae9-e510-4d7d-9b7b-bae22f0fdf1a.png)
 
 We need to do this because from a user's perspective he does not know whether the symbol is
 reexported. Thus _if the bottom makes a breaking change to any exported symbols, not bumpping major
