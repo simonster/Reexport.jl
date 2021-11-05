@@ -72,3 +72,39 @@ using A
 `@reexport @another_macro <import or using expression>` first expands `@another_macro` on the expression, making `@reexport` with other macros.
 
 `@reexport begin ... end` will apply the reexport macro to every expression in the block.
+
+## Use Reexport together with semantic versioning
+
+Without restating [the semantic versioning](https://semver.org/) in complete details here's the
+simplified version of it.
+
+![semvar_workflow](todo.png)
+
+If we adopt Reexport to PkgA, then `@reexport using PkgB` makes PkgB a reexported dependency of
+PkgA. Assume that we have the following dependency graph:
+
+![semvar_example_package](todo.png)
+
+This works pretty well if it's all about bug fixes and new features. But for breaking changes, say
+PkgD makes a breaking release from v1.0.0 to v2.0.0, a natural question is: should we propagate the
+changes from bottom to top? That is: should we make PkgB v1.0.1, v1.1.0 or v2.0.0 release? The
+answer to this is: if the change is about the reexported symbol, then we have to make PkgB v2.0.0
+release, and then do the same to PkgA. If it is not about the reexported symbol, then we should try
+to absorb the PkgD breaking change as PkgB internal changes and only release PkgB v1.0.1 or v1.1.0.
+
+![semvar_solution](todo.png)
+
+We need to do this because from a user's perspective he does not know whether the symbol is
+reexported. Thus _if the bottom makes a breaking change to any exported symbols, not bumpping major
+version on the top is a violation to the SemVer_.
+
+The propagation of breaking changes in the left is definitely not ideal since it would trigger a lot
+of CompatHelper notifications. For this reason, it is a better practice to be conservative on the
+choice of exported and reexported symbols. Thus it is recommended to 
+
+1. only reexport packages that is either stable enough, or that you have direct control of, and
+2. use `@reexport using PkgD: funcA, TypeB` (requires Reexport at least v1.1) instead of `@reexport using PkgD`
+
+Reexport is not the silver bullet. Being lazy and blindly using `@reexport using A, B, C`  means you
+still need to pay for it if you want to strictly follow the SemVer. This is especially a painful
+experience especially when you have you long dependency chain like `PkgD -> PkgB -> PkgA`.
