@@ -99,12 +99,14 @@ reexported. Thus _if the bottom makes a breaking change to any exported symbols,
 version on the top is a violation to the SemVer_.
 
 The propagation of breaking changes in the left is definitely not ideal since it would trigger a lot
-of CompatHelper notifications. For this reason, it is a better practice to be conservative on the
-choice of exported and reexported symbols. Thus it is recommended to 
+of [CompatHelper](https://github.com/JuliaRegistries/CompatHelper.jl) notifications. For this
+reason, it is a better practice to be conservative on the choice of exported and reexported symbols.
+Thus it is recommended to:
 
 1. only reexport packages that is either stable enough, or that you have direct control of, and
 2. use `@reexport using PkgD: funcA, TypeB` (requires Reexport at least v1.1) instead of `@reexport using PkgD`
 
-Reexport is not the silver bullet. Being lazy and blindly using `@reexport using A, B, C`  means you
-still need to pay for it if you want to strictly follow the SemVer. This is especially a painful
-experience especially when you have you long dependency chain like `PkgD -> PkgB -> PkgA`.
+This is just a recommendation so you don't need to follow this, but you need to know that Reexport
+is not the silver bullet. Being lazy and blindly using `@reexport using A, B, C`  means you still
+need to pay for it if you care about the semantics that SemVer gaurentees. This is especially a
+painful experience especially when you have a long dependency chain like `PkgD -> PkgB -> PkgA`.
