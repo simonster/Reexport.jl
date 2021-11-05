@@ -78,7 +78,7 @@ using A
 Without restating [the semantic versioning](https://semver.org/) in complete details here's the
 simplified version of it.
 
-![semver_workflow](https://user-images.githubusercontent.com/8684355/140516112-fb487fc9-9e1d-43d0-9560-258b8d98330b.png)
+![semver_workflow](https://user-images.githubusercontent.com/8684355/140517399-91c1e7eb-8328-4fe5-aaab-d6da91864b9d.png)
 
 If we adopt Reexport to PkgA, then `@reexport using PkgB` makes PkgB a reexported dependency of
 PkgA. Assume that we have the following dependency graph:
