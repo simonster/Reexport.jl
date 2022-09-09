@@ -14,7 +14,7 @@ function reexport(m::Module, ex::Expr)
         return Expr(:block, map(e -> reexport(m, e), ex.args)...)
     end
 
-    ex.head in (:module, :using, :import) ||
+    ex.head::Symbol in (:module, :using, :import) ||
         ex.head === :toplevel && all(e -> isa(e, Expr) && e.head === :using, ex.args) ||
         error("@reexport: syntax error")
 
@@ -24,7 +24,7 @@ function reexport(m::Module, ex::Expr)
         # @reexport {using, import} module Foo ... end
         modules = Any[ex.args[2]]
         ex = Expr(:toplevel, ex, :(using .$(ex.args[2])))
-    elseif ex.head in (:using, :import) && ex.args[1].head == :(:)
+    elseif ex.head::Symbol in (:using, :import) && ex.args[1].head === :(:)
         # @reexport {using, import} Foo: bar, baz
         symbols = [e.args[end] for e in ex.args[1].args[2:end]]
         return Expr(:toplevel, ex, :($eval($m, Expr(:export, $symbols...))))
